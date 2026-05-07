@@ -1,0 +1,619 @@
+import pandas as pd
+import numpy as np
+from sklearn import datasets
+
+iris = datasets.load_iris()
+
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+df['Species'] = iris.target
+
+df['Species'] = df['Species'].map({
+    0: 'Iris-setosa',
+    1: 'Iris-versicolor',
+    2: 'Iris-virginica'
+})
+
+df.columns = [
+    'SepalLengthCm',
+    'SepalWidthCm',
+    'PetalLengthCm',
+    'PetalWidthCm',
+    'Species'
+]
+
+print("First 5 Rows:\n")
+print(df.head())
+
+print("\nShape of Dataset:")
+print(df.shape)
+
+print("\nOverall Summary Statistics:\n")
+print(df.describe())
+
+print("\nMean Values:\n")
+print(df.mean(numeric_only=True))
+
+print("\nMedian Values:\n")
+print(df.median(numeric_only=True))
+
+print("\nStandard Deviation:\n")
+print(df.std(numeric_only=True))
+
+print("\nMinimum Values:\n")
+print(df.min(numeric_only=True))
+
+print("\nMaximum Values:\n")
+print(df.max(numeric_only=True))
+
+print("\nGrouped Statistics by Species:\n")
+
+grouped_stats = df.groupby('Species').agg(
+    ['mean', 'median', 'min', 'max', 'std']
+)
+
+print(grouped_stats)
+
+print("\nCount of Each Species:\n")
+print(df['Species'].value_counts())
+
+setosa = df[df['Species'] == 'Iris-setosa']
+
+print("\nStatistics of Iris-setosa:\n")
+print(setosa.describe())
+
+versicolor = df[df['Species'] == 'Iris-versicolor']
+
+print("\nStatistics of Iris-versicolor:\n")
+print(versicolor.describe())
+
+virginica = df[df['Species'] == 'Iris-virginica']
+
+print("\nStatistics of Iris-virginica:\n")
+print(virginica.describe())
+
+print("\nPercentiles of Dataset:\n")
+
+percentiles = df.describe(percentiles=[0.25, 0.50, 0.75])
+
+print(percentiles)
+
+print("\nVariance of Dataset:\n")
+print(df.var(numeric_only=True))
+
+
+# Basic Statistics – Measures of Central Tendencies and Variance
+
+# Theory
+
+## What is Statistics?
+
+Statistics is the process of:
+
+* collecting data
+* organizing data
+* analyzing data
+* interpreting data
+
+It helps us understand patterns and information from data.
+
+---
+
+# Types of Statistics
+
+## 1. Descriptive Statistics
+
+Used to summarize and describe data.
+
+Examples:
+
+* Mean
+* Median
+* Mode
+* Variance
+* Standard Deviation
+
+---
+
+## 2. Inferential Statistics
+
+Used to make predictions or decisions from data.
+
+Example:
+
+* Predicting student performance
+
+---
+
+# Measures of Central Tendency
+
+Central tendency means:
+
+👉 the center value of data
+
+Main measures:
+
+1. Mean
+2. Median
+3. Mode
+
+---
+
+# 1. Mean
+
+Mean is the average of all values.
+
+Formula:
+
+\text{Mean} = \frac{\text{Sum of all values}}{\text{Number of values}}
+
+Example:
+
+Values:
+10, 20, 30
+
+Mean:
+
+[
+\frac{10+20+30}{3} = 20
+]
+
+### In Python
+
+```python id="hixf5k"
+df.mean()
+```
+
+---
+
+# 2. Median
+
+Median is the middle value after sorting data.
+
+Example:
+
+```text
+10 20 30 40 50
+```
+
+Median = 30
+
+If even numbers exist:
+
+```text
+10 20 30 40
+```
+
+Median:
+
+[
+\frac{20+30}{2} = 25
+]
+
+### In Python
+
+```python id="ww9l2s"
+df.median()
+```
+
+---
+
+# 3. Mode
+
+Mode is the value that appears most frequently.
+
+Example:
+
+```text
+1 2 2 3 4
+```
+
+Mode = 2
+
+### In Python
+
+```python id="m3p2gi"
+df.mode()
+```
+
+---
+
+# Variance
+
+Variance measures:
+👉 how far values are spread from mean
+
+Small variance:
+
+* values are close to mean
+
+Large variance:
+
+* values are far from mean
+
+Formula:
+
+\text{Variance} = \frac{\sum (x-\bar{x})^2}{n}
+
+### In Python
+
+```python id="nlmowh"
+df.var()
+```
+
+---
+
+# Standard Deviation
+
+Standard deviation is square root of variance.
+
+It tells:
+👉 how much data varies from average
+
+Formula:
+
+\sigma = \sqrt{\frac{\sum (x-\bar{x})^2}{n}}
+
+Small SD:
+
+* data close to mean
+
+Large SD:
+
+* data widely spread
+
+### In Python
+
+```python id="r5t0rd"
+df.std()
+```
+
+---
+
+# Minimum and Maximum
+
+## Minimum
+
+Smallest value in dataset.
+
+## Maximum
+
+Largest value in dataset.
+
+### In Python
+
+```python id="pjmt6q"
+df.min()
+df.max()
+```
+
+---
+
+# Percentiles
+
+Percentile divides data into 100 equal parts.
+
+---
+
+## 25th Percentile
+
+25% values are below this.
+
+---
+
+## 50th Percentile
+
+50% values are below this.
+
+This is median.
+
+---
+
+## 75th Percentile
+
+75% values are below this.
+
+---
+
+# Iris Dataset
+
+Iris dataset is a famous machine learning dataset.
+
+Contains:
+
+* 150 flower records
+* 3 flower species
+
+Species:
+
+1. Iris-setosa
+2. Iris-versicolor
+3. Iris-virginica
+
+---
+
+# Features of Iris Dataset
+
+| Feature       | Meaning         |
+| ------------- | --------------- |
+| SepalLengthCm | Length of sepal |
+| SepalWidthCm  | Width of sepal  |
+| PetalLengthCm | Length of petal |
+| PetalWidthCm  | Width of petal  |
+
+---
+
+# Libraries Used
+
+---
+
+# 1. Pandas
+
+Used for:
+
+* data handling
+* tables
+* statistics
+
+Import:
+
+```python id="sbr6b7"
+import pandas as pd
+```
+
+---
+
+# 2. NumPy
+
+Used for:
+
+* numerical calculations
+* arrays
+* mathematical operations
+
+Import:
+
+```python id="1hl3mh"
+import numpy as np
+```
+
+---
+
+# 3. Scikit-learn
+
+Used for:
+
+* machine learning datasets
+* algorithms
+
+Import:
+
+```python id="b26c7i"
+from sklearn import datasets
+```
+
+---
+
+# Functions Used in Practical
+
+| Function       | Purpose                      |
+| -------------- | ---------------------------- |
+| head()         | Shows first 5 rows           |
+| shape          | Gives rows and columns       |
+| mean()         | Calculates average           |
+| median()       | Finds median                 |
+| std()          | Standard deviation           |
+| var()          | Variance                     |
+| min()          | Minimum value                |
+| max()          | Maximum value                |
+| describe()     | Complete statistics          |
+| groupby()      | Groups data                  |
+| value_counts() | Counts categories            |
+| agg()          | Multiple statistics together |
+
+---
+
+# What is GroupBy?
+
+`groupby()` groups data according to category.
+
+Example:
+
+* group flowers by species
+
+### Syntax
+
+```python id="n93cgm"
+df.groupby('Species')
+```
+
+---
+
+# What is agg()?
+
+`agg()` performs multiple operations together.
+
+Example:
+
+```python id="35jsm8"
+df.groupby('Species').agg(['mean','median'])
+```
+
+---
+
+# Viva Questions and Answers
+
+# 1. What is statistics?
+
+Statistics is the science of collecting, organizing, analyzing and interpreting data.
+
+---
+
+# 2. What is mean?
+
+Mean is the average of all values.
+
+---
+
+# 3. What is median?
+
+Median is the middle value of sorted data.
+
+---
+
+# 4. What is mode?
+
+Mode is the most frequently occurring value.
+
+---
+
+# 5. What is variance?
+
+Variance measures spread of data from mean.
+
+---
+
+# 6. What is standard deviation?
+
+Standard deviation shows how much data varies from mean.
+
+---
+
+# 7. What is percentile?
+
+Percentile tells percentage of values below a particular value.
+
+---
+
+# 8. What is the use of describe()?
+
+`describe()` gives statistical summary of dataset.
+
+---
+
+# 9. What does head() do?
+
+Shows first 5 rows of dataset.
+
+---
+
+# 10. What is shape?
+
+Shape gives:
+
+* number of rows
+* number of columns
+
+---
+
+# 11. What is groupby()?
+
+Used to group data according to category.
+
+---
+
+# 12. What is agg()?
+
+Used to apply multiple statistical functions together.
+
+---
+
+# 13. Why do we use Pandas?
+
+For data analysis and table handling.
+
+---
+
+# 14. Why do we use NumPy?
+
+For mathematical and numerical operations.
+
+---
+
+# 15. Why do we use Scikit-learn?
+
+For machine learning and datasets.
+
+---
+
+# 16. What is Iris dataset?
+
+A famous dataset containing measurements of iris flowers.
+
+---
+
+# 17. How many species are present in Iris dataset?
+
+Three species:
+
+* Iris-setosa
+* Iris-versicolor
+* Iris-virginica
+
+---
+
+# 18. How many records are present in Iris dataset?
+
+150 records.
+
+---
+
+# 19. What does std() function do?
+
+Calculates standard deviation.
+
+---
+
+# 20. Difference between variance and standard deviation?
+
+| Variance            | Standard Deviation      |
+| ------------------- | ----------------------- |
+| Square of deviation | Square root of variance |
+| Larger value        | Smaller readable value  |
+
+---
+
+# 21. What is DataFrame?
+
+A table-like structure in Pandas.
+
+---
+
+# 22. What is categorical data?
+
+Data represented by categories.
+
+Example:
+
+* Species
+* Gender
+
+---
+
+# 23. What is numerical data?
+
+Data represented by numbers.
+
+Example:
+
+* Age
+* Salary
+* Marks
+
+---
+
+# 24. Why do we calculate summary statistics?
+
+To understand data quickly.
+
+---
+
+# 25. What is the use of value_counts()?
+
+Counts frequency of categories.
+
+Example:
+
+```python id="a7b9o4"
+df['Species'].value_counts()
+```
