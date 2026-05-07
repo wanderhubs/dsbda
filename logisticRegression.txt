@@ -1,0 +1,621 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+
+df = pd.read_csv("Social_Network_Ads.csv")
+
+print(df.head())
+print(df.info())
+
+X = df[['Age', 'EstimatedSalary']]
+y = df['Purchased']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=0
+)
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+model = LogisticRegression(random_state=0)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+cm = confusion_matrix(y_test, y_pred)
+print("\nConfusion Matrix:")
+print(cm)
+
+TN = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TP = cm[1][1]
+
+print("\nTrue Positive:", TP)
+print("False Positive:", FP)
+print("True Negative:", TN)
+print("False Negative:", FN)
+
+accuracy = (TP + TN) / (TP + TN + FP + FN)
+error_rate = (FP + FN) / (TP + TN + FP + FN)
+precision = TP / (TP + FP)
+recall = TP / (TP + FN)
+
+print("\nAccuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)
+
+
+
+
+
+
+# Logistic Regression – Theory
+
+## What is Logistic Regression?
+
+Logistic Regression is a supervised machine learning algorithm used for **classification problems**.
+
+It predicts categories such as:
+
+* Yes / No
+* True / False
+* Purchased / Not Purchased
+
+In this practical:
+
+* Output is `Purchased`
+* `0` → Not Purchased
+* `1` → Purchased
+
+---
+
+# Why is it called Regression?
+
+Although the name contains “Regression”, it is mainly used for **classification**.
+
+It predicts probability between:
+
+* 0 and 1
+
+Then classifies output.
+
+Example:
+
+* Probability > 0.5 → Purchased
+* Probability < 0.5 → Not Purchased
+
+---
+
+# What is Classification?
+
+Classification means predicting categories or classes.
+
+Examples:
+
+* Spam / Not Spam
+* Pass / Fail
+* Disease / No Disease
+
+---
+
+# Dataset Used
+
+## Social_Network_Ads.csv
+
+Dataset contains:
+
+* Age
+* EstimatedSalary
+* Purchased
+
+Goal:
+Predict whether customer will purchase product or not.
+
+---
+
+# Features and Target
+
+## Features (Input Variables)
+
+```python id="3kp5zr"
+Age
+EstimatedSalary
+```
+
+These are independent variables.
+
+---
+
+## Target Variable
+
+```python id="e2vz7o"
+Purchased
+```
+
+This is dependent variable.
+
+---
+
+# Steps in Logistic Regression
+
+1. Import libraries
+2. Load dataset
+3. Select features and target
+4. Split dataset
+5. Perform feature scaling
+6. Train logistic regression model
+7. Predict output
+8. Create confusion matrix
+9. Calculate performance metrics
+
+---
+
+# Train-Test Split
+
+Dataset is divided into:
+
+* Training Data
+* Testing Data
+
+Usually:
+
+* 75% training
+* 25% testing
+
+Purpose:
+
+* Training → learn patterns
+* Testing → check performance
+
+---
+
+# Feature Scaling
+
+Feature scaling converts values into same range.
+
+Example:
+
+* Age = 25
+* Salary = 100000
+
+Large salary values dominate smaller age values.
+
+Scaling solves this issue.
+
+---
+
+# StandardScaler
+
+StandardScaler standardizes data using mean and standard deviation.
+
+Formula:
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"z = \frac{x-\mu}{\sigma}"}}
+
+Where:
+
+* x = original value
+* μ = mean
+* σ = standard deviation
+
+---
+
+# Logistic Function (Sigmoid Function)
+
+Logistic regression uses sigmoid function.
+
+Formula:
+
+\sigma(x)=\frac{1}{1+e^{-x}}
+
+Output is always between:
+
+* 0 and 1
+
+Used as probability.
+
+---
+
+# Confusion Matrix
+
+Confusion matrix evaluates classification model.
+
+Structure:
+
+\begin{bmatrix}TN & FP \ FN & TP\end{bmatrix}
+
+---
+
+# TP, TN, FP, FN
+
+## True Positive (TP)
+
+Model predicted YES and actual answer is YES.
+
+Example:
+Customer purchased and model predicted purchased.
+
+---
+
+## True Negative (TN)
+
+Model predicted NO and actual answer is NO.
+
+---
+
+## False Positive (FP)
+
+Model predicted YES but actual answer is NO.
+
+Also called:
+
+* Type I Error
+
+---
+
+## False Negative (FN)
+
+Model predicted NO but actual answer is YES.
+
+Also called:
+
+* Type II Error
+
+---
+
+# Accuracy
+
+Accuracy tells how many predictions are correct.
+
+Formula:
+
+Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
+
+---
+
+# Error Rate
+
+Shows wrong predictions.
+
+Formula:
+
+Error\ Rate = \frac{FP + FN}{TP + TN + FP + FN}
+
+---
+
+# Precision
+
+Out of predicted YES values,
+how many are actually YES.
+
+Formula:
+
+Precision = \frac{TP}{TP + FP}
+
+---
+
+# Recall
+
+Out of actual YES values,
+how many are correctly predicted.
+
+Formula:
+
+Recall = \frac{TP}{TP + FN}
+
+---
+
+# Advantages of Logistic Regression
+
+1. Simple and easy to understand
+2. Fast algorithm
+3. Good for binary classification
+4. Works well on small datasets
+5. Gives probability output
+
+---
+
+# Disadvantages of Logistic Regression
+
+1. Works mainly for linear data
+2. Less accurate for complex datasets
+3. Sensitive to outliers
+4. Requires feature scaling
+
+---
+
+# Applications of Logistic Regression
+
+1. Spam email detection
+2. Disease prediction
+3. Fraud detection
+4. Customer purchase prediction
+5. Pass/Fail prediction
+
+---
+
+# Important Libraries Used
+
+| Library            | Purpose          |
+| ------------------ | ---------------- |
+| pandas             | Data handling    |
+| sklearn            | Machine learning |
+| train_test_split   | Split dataset    |
+| StandardScaler     | Feature scaling  |
+| LogisticRegression | Build model      |
+| confusion_matrix   | Evaluate model   |
+
+---
+
+# Viva Questions and Answers
+
+---
+
+# 1. What is Logistic Regression?
+
+Logistic Regression is a supervised machine learning algorithm used for classification problems.
+
+---
+
+# 2. Is Logistic Regression used for classification or regression?
+
+It is mainly used for classification.
+
+---
+
+# 3. What is supervised learning?
+
+Supervised learning learns using labeled data.
+
+Example:
+Input and correct output are already given.
+
+---
+
+# 4. What is classification?
+
+Classification means predicting categories or classes.
+
+---
+
+# 5. Why do we use Logistic Regression?
+
+Used to predict binary outcomes like:
+
+* Yes/No
+* True/False
+
+---
+
+# 6. What is binary classification?
+
+Classification having only two classes.
+
+Example:
+Purchased / Not Purchased
+
+---
+
+# 7. What is sigmoid function?
+
+Sigmoid function converts output into probability between 0 and 1.
+
+---
+
+# 8. What is confusion matrix?
+
+A table used to evaluate classification model performance.
+
+---
+
+# 9. What is TP?
+
+True Positive:
+Model correctly predicts positive class.
+
+---
+
+# 10. What is TN?
+
+True Negative:
+Model correctly predicts negative class.
+
+---
+
+# 11. What is FP?
+
+False Positive:
+Model predicts YES but actual answer is NO.
+
+---
+
+# 12. What is FN?
+
+False Negative:
+Model predicts NO but actual answer is YES.
+
+---
+
+# 13. What is accuracy?
+
+Accuracy shows percentage of correct predictions.
+
+---
+
+# 14. What is precision?
+
+Precision tells how many predicted positives are actually positive.
+
+---
+
+# 15. What is recall?
+
+Recall tells how many actual positives are correctly predicted.
+
+---
+
+# 16. Why is feature scaling needed?
+
+To bring all values into similar range.
+
+---
+
+# 17. What is StandardScaler?
+
+StandardScaler standardizes dataset values.
+
+---
+
+# 18. What is train_test_split?
+
+It divides dataset into training and testing data.
+
+---
+
+# 19. Why do we split dataset?
+
+To test model performance on unseen data.
+
+---
+
+# 20. What is model training?
+
+Process where model learns patterns from data.
+
+---
+
+# 21. What is prediction?
+
+Using trained model to predict output.
+
+---
+
+# 22. What is dependent variable?
+
+Output variable.
+
+Example:
+Purchased
+
+---
+
+# 23. What are independent variables?
+
+Input variables.
+
+Example:
+Age and EstimatedSalary
+
+---
+
+# 24. What is overfitting?
+
+Model performs well on training data but poorly on testing data.
+
+---
+
+# 25. What is underfitting?
+
+Model fails to learn patterns properly.
+
+---
+
+# 26. Difference between Linear and Logistic Regression?
+
+| Linear Regression          | Logistic Regression     |
+| -------------------------- | ----------------------- |
+| Predicts continuous values | Predicts categories     |
+| Used for regression        | Used for classification |
+| Output can be any value    | Output between 0 and 1  |
+
+---
+
+# 27. What does `.fit()` do?
+
+Trains the model.
+
+---
+
+# 28. What does `.predict()` do?
+
+Predicts output using trained model.
+
+---
+
+# 29. What does `fit_transform()` do?
+
+Learns scaling and transforms training data.
+
+---
+
+# 30. What does `transform()` do?
+
+Transforms testing data using same scaling.
+
+---
+
+# 31. Why do we use random_state?
+
+To get same output every time.
+
+---
+
+# 32. What is pandas?
+
+Python library used for data analysis and handling.
+
+---
+
+# 33. What is sklearn?
+
+Machine learning library in Python.
+
+---
+
+# 34. What is DataFrame?
+
+Table-like structure in pandas.
+
+---
+
+# 35. What does `df.head()` do?
+
+Displays first 5 rows.
+
+---
+
+# 36. What does `df.info()` do?
+
+Displays dataset information.
+
+---
+
+# 37. What is machine learning?
+
+Machine learning enables computers to learn from data without explicit programming.
+
+---
+
+# 38. What are real-life applications of Logistic Regression?
+
+* Email spam detection
+* Medical diagnosis
+* Fraud detection
+* Customer prediction
+
+---
+
+# 39. Why is logistic regression popular?
+
+Because it is simple, fast, and interpretable.
+
+---
+
+# 40. What is probability in Logistic Regression?
+
+Chance that output belongs to a class.
