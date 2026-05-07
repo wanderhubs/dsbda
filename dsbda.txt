@@ -1,0 +1,553 @@
+# Import required libraries
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+
+# Load dataset
+df = pd.read_csv("weather.csv")
+
+# Display dataset
+df
+
+# Check dimensions of dataset
+df.shape
+
+# Display first 5 rows
+df.head()
+
+# Display last 5 rows
+df.tail()
+
+# Display column names
+df.columns
+
+# Display dataset information
+df.info()
+
+# Check missing values
+df.isnull()
+
+# Count missing values
+df.isnull().sum()
+
+# Display statistical summary
+df.describe()
+
+# Check data types
+df.dtypes
+
+# Convert categorical variables into numerical variables using Label Encoding
+le = LabelEncoder()
+
+df['WindGustDir'] = le.fit_transform(df['WindGustDir'])
+df['WindDir9am'] = le.fit_transform(df['WindDir9am'])
+df['WindDir3pm'] = le.fit_transform(df['WindDir3pm'])
+df['RainToday'] = le.fit_transform(df['RainToday'])
+df['RainTomorrow'] = le.fit_transform(df['RainTomorrow'])
+
+# Display dataset after encoding
+df.head()
+
+# Normalize numerical columns
+scaler = MinMaxScaler()
+
+numeric_columns = [
+    'MinTemp', 'MaxTemp', 'Rainfall', 'Evaporation',
+    'Sunshine', 'WindGustSpeed', 'WindSpeed9am',
+    'WindSpeed3pm', 'Humidity9am', 'Humidity3pm',
+    'Pressure9am', 'Pressure3pm', 'Cloud9am',
+    'Cloud3pm', 'Temp9am', 'Temp3pm', 'RISK_MM'
+]
+
+df[numeric_columns] = scaler.fit_transform(df[numeric_columns])
+
+# Display normalized dataset
+df.head()
+
+# Final dataset information
+df.info()
+
+# Final dataset preview
+df.head()
+
+
+
+
+
+
+
+
+
+# Theory – Data Wrangling and Data Preprocessing Practical
+
+## What is Data Wrangling?
+
+Data Wrangling means cleaning and transforming raw data into a proper format so it can be used for analysis or machine learning.
+
+Real-world datasets usually contain:
+
+* Missing values
+* Incorrect data
+* Different data types
+* Categorical values
+* Unscaled numerical values
+
+So preprocessing is necessary before building any model.
+
+---
+
+# Concepts Used in This Practical
+
+---
+
+# 1. Importing Libraries
+
+```python
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
+```
+
+## Explanation
+
+Libraries are pre-written code packages that help perform tasks easily.
+
+### Libraries Used
+
+| Library      | Purpose                                |
+| ------------ | -------------------------------------- |
+| Pandas       | Used for handling datasets             |
+| NumPy        | Used for numerical operations          |
+| LabelEncoder | Converts categorical text into numbers |
+| MinMaxScaler | Normalizes numerical data              |
+
+---
+
+# 2. Loading Dataset
+
+```python
+df = pd.read_csv("weather.csv")
+```
+
+## Theory
+
+* `read_csv()` is used to load CSV files into a DataFrame.
+* A DataFrame is a table-like structure in Pandas.
+
+Example:
+
+| MinTemp | MaxTemp | RainToday |
+| ------- | ------- | --------- |
+| 13.4    | 22.9    | Yes       |
+
+---
+
+# 3. Understanding Dataset
+
+## Functions Used
+
+```python
+df.shape
+df.head()
+df.tail()
+df.columns
+df.info()
+df.describe()
+df.dtypes
+```
+
+## Theory
+
+### `df.shape`
+
+Returns:
+
+* Number of rows
+* Number of columns
+
+Example:
+
+```python
+(366, 22)
+```
+
+Means:
+
+* 366 rows
+* 22 columns
+
+---
+
+### `df.head()`
+
+Displays first 5 rows.
+
+Used to quickly inspect data.
+
+---
+
+### `df.tail()`
+
+Displays last 5 rows.
+
+---
+
+### `df.columns`
+
+Shows all column names.
+
+---
+
+### `df.info()`
+
+Provides:
+
+* Column names
+* Data types
+* Non-null values
+
+Used to identify:
+
+* Missing values
+* Data types
+
+---
+
+### `df.describe()`
+
+Provides statistical summary of numerical columns.
+
+Includes:
+
+* Mean
+* Standard deviation
+* Minimum
+* Maximum
+
+---
+
+### `df.dtypes`
+
+Displays datatype of each column.
+
+Example:
+
+* int64
+* float64
+* object
+
+---
+
+# 4. Checking Missing Values
+
+## Code
+
+```python
+df.isnull()
+df.isnull().sum()
+```
+
+## Theory
+
+Missing values are empty cells in dataset.
+
+Example:
+
+| Rainfall |
+| -------- |
+| 2.4      |
+| NaN      |
+| 1.8      |
+
+`NaN` means missing value.
+
+### `isnull()`
+
+Checks whether values are missing.
+
+### `isnull().sum()`
+
+Counts total missing values in each column.
+
+---
+
+# 5. Label Encoding
+
+## Code
+
+```python
+le = LabelEncoder()
+
+df['RainToday'] = le.fit_transform(df['RainToday'])
+```
+
+## Theory
+
+Machine learning models cannot understand text values.
+
+So categorical data must be converted into numbers.
+
+Example:
+
+| Before Encoding | After Encoding |
+| --------------- | -------------- |
+| Yes             | 1              |
+| No              | 0              |
+
+This process is called **Label Encoding**.
+
+---
+
+## What is `fit_transform()`?
+
+It performs two tasks together:
+
+### `fit()`
+
+Learns unique values.
+
+Example:
+
+```python
+Yes
+No
+```
+
+### `transform()`
+
+Converts them into numbers.
+
+Example:
+
+```python
+Yes → 1
+No → 0
+```
+
+---
+
+# 6. Feature Scaling / Normalization
+
+## Code
+
+```python
+scaler = MinMaxScaler()
+
+df[numeric_columns] = scaler.fit_transform(df[numeric_columns])
+```
+
+# Why Scaling is Needed?
+
+Different columns may have different ranges.
+
+Example:
+
+| Feature     | Values    |
+| ----------- | --------- |
+| Temperature | 10–40     |
+| Pressure    | 1000–1030 |
+
+Large values dominate smaller values.
+
+Scaling brings all values into the same range.
+
+---
+
+# 7. Min-Max Normalization
+
+## Formula
+
+X_{scaled} = \frac{X - X_{min}}{X_{max} - X_{min}}
+
+## Theory
+
+Min-Max Scaling converts values between:
+
+* 0 and 1
+
+Example:
+
+| Original | Scaled |
+| -------- | ------ |
+| 10       | 0.0    |
+| 20       | 0.5    |
+| 30       | 1.0    |
+
+---
+
+# 8. Numerical Columns
+
+```python
+numeric_columns = [
+    'MinTemp', 'MaxTemp', 'Rainfall'
+]
+```
+
+These are continuous numerical values.
+
+Only numerical columns are normalized.
+
+---
+
+# 9. Data Preprocessing
+
+This practical performs major preprocessing tasks:
+
+| Task                   | Purpose                   |
+| ---------------------- | ------------------------- |
+| Missing value checking | Find empty data           |
+| Label Encoding         | Convert text into numbers |
+| Normalization          | Scale numerical data      |
+| Dataset inspection     | Understand structure      |
+
+---
+
+# Advantages of Data Preprocessing
+
+* Improves model accuracy
+* Removes inconsistencies
+* Makes data machine-readable
+* Reduces bias due to large values
+* Improves training speed
+
+---
+
+# Applications
+
+Data preprocessing is used in:
+
+* Weather prediction
+* Medical diagnosis
+* Stock market prediction
+* Recommendation systems
+* Fraud detection
+
+---
+
+# Important Terms
+
+| Term             | Meaning                       |
+| ---------------- | ----------------------------- |
+| Dataset          | Collection of data            |
+| DataFrame        | Table structure in Pandas     |
+| Feature          | Column in dataset             |
+| Missing Value    | Empty data                    |
+| Categorical Data | Text data                     |
+| Numerical Data   | Numeric values                |
+| Encoding         | Converting text into numbers  |
+| Scaling          | Bringing values to same range |
+
+---
+
+# Viva Questions and Answers
+
+## 1. What is data preprocessing?
+
+Data preprocessing is the process of cleaning and transforming raw data before analysis or machine learning.
+
+---
+
+## 2. Why is preprocessing important?
+
+Because raw data may contain:
+
+* Missing values
+* Errors
+* Different scales
+* Text values
+
+---
+
+## 3. What is Pandas?
+
+[Pandas Official Documentation](https://pandas.pydata.org?utm_source=chatgpt.com) is a Python library used for data manipulation and analysis.
+
+---
+
+## 4. What is NumPy?
+
+[NumPy Official Documentation](https://numpy.org?utm_source=chatgpt.com) is a Python library used for numerical computations.
+
+---
+
+## 5. What is a DataFrame?
+
+A DataFrame is a table-like data structure in Pandas.
+
+---
+
+## 6. What does `df.shape` return?
+
+It returns:
+
+* Number of rows
+* Number of columns
+
+---
+
+## 7. What is Label Encoding?
+
+It converts categorical text data into numerical form.
+
+Example:
+
+* Yes → 1
+* No → 0
+
+---
+
+## 8. Why do we use LabelEncoder?
+
+Machine learning algorithms cannot understand text values directly.
+
+---
+
+## 9. What is normalization?
+
+Normalization scales data into a fixed range, usually 0 to 1.
+
+---
+
+## 10. What is MinMaxScaler?
+
+[Scikit-learn MinMaxScaler Documentation](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html?utm_source=chatgpt.com) is used to normalize numerical data between 0 and 1.
+
+---
+
+## 11. What does `fit_transform()` do?
+
+It:
+
+1. Learns the data
+2. Transforms the data
+
+---
+
+## 12. What are missing values?
+
+Missing values are empty or unavailable data in dataset.
+
+---
+
+## 13. What does `df.info()` do?
+
+It displays:
+
+* Data types
+* Non-null counts
+* Memory usage
+
+---
+
+## 14. What does `df.describe()` do?
+
+It provides statistical summary of numerical columns.
+
+---
+
+## 15. Difference between categorical and numerical data?
+
+| Categorical     | Numerical     |
+| --------------- | ------------- |
+| Text values     | Number values |
+| Example: Yes/No | Example: 23.5 |
