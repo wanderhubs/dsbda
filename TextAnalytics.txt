@@ -1,0 +1,517 @@
+```python
+# Install required libraries
+!pip install nltk scikit-learn pandas
+
+# Import libraries
+import nltk
+import string
+import pandas as pd
+
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag
+from sklearn.feature_extraction.text import TfidfVectorizer
+from collections import Counter
+
+# Download required NLTK packages
+nltk.download('punkt') #Downloads tokenizer data.
+#Needed for splitting sentence into words.
+
+nltk.download('punkt_tab')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger') #Downloads POS tagging model.
+nltk.download('averaged_perceptron_tagger_eng')
+nltk.download('wordnet')
+
+# ---------------------------------------------------
+# STEP 1: Sample Documents
+# ---------------------------------------------------
+
+documents = [
+    "Text analytics is the process of converting unstructured text into meaningful data.",
+    "Natural Language Processing helps computers understand human language.",
+    "Text mining is useful for extracting patterns and insights from documents."
+]
+
+# Select first document for preprocessing
+text = documents[0]
+
+print("Original Document:\n")
+print(text)
+
+# ---------------------------------------------------
+# STEP 2: Tokenization
+# ---------------------------------------------------
+
+tokens = word_tokenize(text)
+
+print("\nTokens:\n")
+print(tokens)
+
+# ---------------------------------------------------
+# STEP 3: POS Tagging
+# ---------------------------------------------------
+
+pos_tags = pos_tag(tokens)
+
+print("\nPOS Tags:\n")
+print(pos_tags)
+
+# ---------------------------------------------------
+# STEP 4: Stop Words Removal + Punctuation Removal
+# ---------------------------------------------------
+
+stop_words = set(stopwords.words('english'))
+
+filtered_tokens = [
+    word for word in tokens
+    if word.lower() not in stop_words and word not in string.punctuation
+]
+
+print("\nAfter Stop Words and Punctuation Removal:\n")
+print(filtered_tokens)
+
+# ---------------------------------------------------
+# STEP 5: Stemming
+# ---------------------------------------------------
+
+ps = PorterStemmer()
+
+stemmed_words = [ps.stem(word) for word in filtered_tokens]
+
+print("\nStemmed Words:\n")
+print(stemmed_words)
+
+# ---------------------------------------------------
+# STEP 6: Lemmatization
+# ---------------------------------------------------
+
+lemmatizer = WordNetLemmatizer()
+
+lemmatized_words = [lemmatizer.lemmatize(word.lower()) for word in filtered_tokens]
+
+print("\nLemmatized Words:\n")
+print(lemmatized_words)
+
+# ---------------------------------------------------
+# STEP 7: Term Frequency
+# ---------------------------------------------------
+
+tf = Counter(lemmatized_words)
+
+print("\nTerm Frequency:\n")
+print(tf)
+
+# ---------------------------------------------------
+# STEP 8: TF-IDF Representation
+# ---------------------------------------------------
+
+vectorizer = TfidfVectorizer(stop_words='english')
+
+tfidf_matrix = vectorizer.fit_transform(documents)
+
+feature_names = vectorizer.get_feature_names_out()
+
+tfidf_df = pd.DataFrame(
+    tfidf_matrix.toarray(),
+    columns=feature_names
+)
+
+print("\nTF-IDF Matrix:\n")
+print(tfidf_df)
+```
+
+This code satisfies all requirements:
+
+**Tokenization, POS Tagging, Stop Words Removal, Stemming, Lemmatization, Term Frequency, and TF-IDF.**
+
+
+
+
+# Text Analytics Practical Theory
+
+# Experiment Title
+
+## Text Analytics using NLP Preprocessing Techniques and TF-IDF Representation
+
+---
+
+# Aim
+
+To perform text preprocessing techniques such as:
+
+* Tokenization
+* POS Tagging
+* Stop Word Removal
+* Stemming
+* Lemmatization
+
+and to create document representation using:
+
+* Term Frequency (TF)
+* Inverse Document Frequency (IDF)
+* TF-IDF
+
+using Python.
+
+---
+
+# Introduction to Text Analytics
+
+Text Analytics is the process of converting unstructured text data into meaningful information.
+
+It helps computers understand human language by analyzing text documents.
+
+Text Analytics is a part of:
+
+* Natural Language Processing (NLP)
+* Artificial Intelligence (AI)
+* Machine Learning (ML)
+
+---
+
+# Applications of Text Analytics
+
+* Chatbots
+* Sentiment Analysis
+* Spam Detection
+* Search Engines
+* Recommendation Systems
+* Text Classification
+* Voice Assistants
+
+---
+
+# Natural Language Processing (NLP)
+
+## Definition
+
+Natural Language Processing is a branch of Artificial Intelligence that helps computers understand, process, and analyze human language.
+
+Examples:
+
+* Google Translate
+* Siri
+* Alexa
+* ChatGPT
+
+---
+
+# Document Preprocessing Techniques
+
+---
+
+# 1. Tokenization
+
+## Definition
+
+Tokenization is the process of breaking text into smaller parts called tokens.
+
+Tokens may be:
+
+* words
+* sentences
+* characters
+
+---
+
+## Example
+
+Sentence:
+
+```text
+Text analytics is useful
+```
+
+After Tokenization:
+
+```text
+['Text', 'analytics', 'is', 'useful']
+```
+
+---
+
+## Advantages
+
+* Easy text analysis
+* Required for NLP tasks
+* Helps in preprocessing
+
+---
+
+# 2. POS Tagging (Part of Speech Tagging)
+
+## Definition
+
+POS Tagging identifies the grammatical role of each word in a sentence.
+
+---
+
+## Common POS Tags
+
+| Tag | Meaning   |
+| --- | --------- |
+| NN  | Noun      |
+| VB  | Verb      |
+| JJ  | Adjective |
+| RB  | Adverb    |
+
+---
+
+## Example
+
+```text
+('dog', 'NN')
+('runs', 'VB')
+```
+
+---
+
+## Uses
+
+* Grammar checking
+* Speech recognition
+* Text understanding
+
+---
+
+# 3. Stop Word Removal
+
+## Definition
+
+Stop words are commonly used words that do not add much meaning to text.
+
+Examples:
+
+* is
+* the
+* and
+* in
+* of
+
+These words are removed to improve text analysis.
+
+---
+
+## Example
+
+Before:
+
+```text
+Text analytics is the process
+```
+
+After:
+
+```text
+Text analytics process
+```
+
+---
+
+## Advantages
+
+* Reduces unnecessary data
+* Improves efficiency
+* Increases processing speed
+
+---
+
+# 4. Stemming
+
+## Definition
+
+Stemming reduces a word to its root form.
+
+It may not produce a meaningful word.
+
+---
+
+## Example
+
+| Original Word | Stemmed Word |
+| ------------- | ------------ |
+| playing       | play         |
+| studies       | studi        |
+| connected     | connect      |
+
+---
+
+## Advantages
+
+* Reduces word variations
+* Improves searching and matching
+
+---
+
+## Disadvantage
+
+Sometimes produces incorrect or incomplete words.
+
+Example:
+
+```text
+studies → studi
+```
+
+---
+
+# 5. Lemmatization
+
+## Definition
+
+Lemmatization converts a word into its meaningful base dictionary form called lemma.
+
+---
+
+## Example
+
+| Original Word | Lemmatized Word |
+| ------------- | --------------- |
+| studies       | study           |
+| running       | run             |
+| better        | good            |
+
+---
+
+## Advantages
+
+* Produces meaningful words
+* More accurate than stemming
+
+---
+
+## Difference Between Stemming and Lemmatization
+
+| Stemming                  | Lemmatization             |
+| ------------------------- | ------------------------- |
+| Faster                    | Slower                    |
+| May produce invalid words | Produces meaningful words |
+| Uses rules                | Uses dictionary           |
+
+---
+
+# Term Frequency (TF)
+
+## Definition
+
+Term Frequency measures how many times a word appears in a document.
+
+---
+
+## Formula
+
+TF = \frac{\text{Number of times term appears in document}}{\text{Total number of terms in document}}
+
+---
+
+## Example
+
+Document:
+
+```text
+Text analytics text mining
+```
+
+Word "text" appears 2 times.
+
+Total words = 4
+
+TF = 2/4 = 0.5
+
+---
+
+# Inverse Document Frequency (IDF)
+
+## Definition
+
+IDF measures how important a word is across multiple documents.
+
+Common words get lower score.
+Rare words get higher score.
+
+---
+
+## Formula
+
+IDF = \log\left(\frac{\text{Total number of documents}}{\text{Number of documents containing the term}}\right)
+
+---
+
+## Example
+
+If word appears in every document:
+
+* low IDF
+
+If word appears in only one document:
+
+* high IDF
+
+---
+
+# TF-IDF
+
+## Definition
+
+TF-IDF is used to find important words in documents.
+
+It combines:
+
+* Term Frequency
+* Inverse Document Frequency
+
+---
+
+## Formula
+
+TF\text{-}IDF = TF \times IDF
+
+---
+
+## Advantages of TF-IDF
+
+* Finds important words
+* Removes less useful words
+* Used in search engines
+* Helps in text classification
+
+---
+
+# Libraries Used
+
+| Library             | Purpose                 |
+| ------------------- | ----------------------- |
+| NLTK                | NLP preprocessing       |
+| scikit-learn        | TF-IDF calculation      |
+| pandas              | Table display           |
+| collections.Counter | Term Frequency counting |
+
+---
+
+# Algorithms/Methods Used
+
+* Tokenization
+* POS Tagging
+* Stop Word Removal
+* Porter Stemming
+* WordNet Lemmatization
+* TF-IDF Vectorization
+
+---
+
+# Result
+
+The document preprocessing techniques were successfully applied and document representation using TF-IDF was generated successfully.
+
+---
+
+# Conclusion
+
+In this practical:
+
+* Text preprocessing was performed successfully.
+* Important NLP techniques like Tokenization, POS Tagging, Stop Word Removal, Stemming, and Lemmatization were applied.
+* TF and TF-IDF were calculated for document representation.
+* The experiment demonstrated how unstructured text can be converted into meaningful data for analysis.
