@@ -1,0 +1,270 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+
+# Load Iris dataset
+iris = load_iris()
+
+# Create DataFrame
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+
+# Add target column
+df['target'] = iris.target
+
+# Display first 5 rows
+print("First 5 rows of dataset:")
+print(df.head())
+
+# Dataset information
+print("\nShape of Dataset:", df.shape)
+print("\nColumns:", df.columns)
+print("\nData Types:\n", df.dtypes)
+print("\nBasic Statistics:\n", df.describe())
+
+# Feature names only
+features = iris.feature_names
+
+# 1. Number of features and their types
+print("\nNumber of Features:", len(features))
+
+print("\nFeature Types:")
+for col in features:
+    print(col, "→ Numeric")
+
+print("\nTarget Column:")
+print("target → Nominal / Categorical")
+
+# 2. Histogram for each feature
+df[features].hist(figsize=(10, 8))
+plt.suptitle("Histograms of Iris Features")
+plt.show()
+
+# 3. Boxplot for each feature
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=df[features])
+plt.title("Boxplot of Iris Features")
+plt.show()
+
+# Compare distributions using mean and median
+print("\nComparison of Distributions:")
+
+for col in features:
+    print(f"\nFeature: {col}")
+    print("Mean:", df[col].mean())
+    print("Median:", df[col].median())
+
+# Identify outliers using IQR method
+print("\nOutlier Detection using IQR Method:")
+
+for col in features:
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+    IQR = Q3 - Q1
+
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+
+    outliers = df[(df[col] < lower) | (df[col] > upper)]
+
+    print(f"\nFeature: {col}")
+    print("Outliers count:", len(outliers))
+
+
+
+# Theory: Data Visualization using Iris Dataset
+
+## Aim
+
+To load the Iris flower dataset into a DataFrame, analyze the features and their types, visualize feature distributions using histograms, and identify outliers using boxplots.
+
+---
+
+# Introduction
+
+Data Visualization is the graphical representation of data using charts and plots.
+It helps in:
+
+* understanding data easily
+* finding patterns
+* comparing distributions
+* detecting outliers
+
+In this practical, the Iris flower dataset is used for visualization and analysis.
+
+---
+
+# About Iris Dataset
+
+The Iris dataset is a famous dataset used in Machine Learning and Data Analytics.
+
+It contains information about three species of Iris flowers:
+
+1. Setosa
+2. Versicolor
+3. Virginica
+
+The dataset contains:
+
+* 150 rows
+* 4 feature columns
+* 1 target column
+
+---
+
+# Features in Iris Dataset
+
+| Feature      | Type                  |
+| ------------ | --------------------- |
+| Sepal Length | Numeric               |
+| Sepal Width  | Numeric               |
+| Petal Length | Numeric               |
+| Petal Width  | Numeric               |
+| Target       | Nominal / Categorical |
+
+---
+
+# Numeric Data
+
+Numeric data contains numbers and measurements.
+
+Example:
+
+* flower length
+* flower width
+
+Numeric data can be used for:
+
+* calculations
+* averages
+* graphs
+
+---
+
+# Nominal Data
+
+Nominal data represents categories or labels without any order.
+
+Example:
+
+* flower species
+* colors
+* names
+
+In Iris dataset:
+
+* target column is nominal because it represents flower categories.
+
+---
+
+# Histogram
+
+A Histogram is a graph used to show the distribution of numerical data.
+
+It divides data into intervals called bins and shows:
+
+* frequency of values
+* spread of data
+
+Histogram helps to:
+
+* understand data distribution
+* detect skewness
+* identify concentration of values
+
+---
+
+# Boxplot
+
+A Boxplot is used to visualize:
+
+* minimum value
+* maximum value
+* median
+* quartiles
+* outliers
+
+It helps to:
+
+* compare feature distributions
+* detect outliers easily
+
+---
+
+# Outliers
+
+Outliers are unusual or extreme values that are very different from other data values.
+
+Outliers may occur because of:
+
+* measurement errors
+* incorrect data entry
+* natural variation
+
+In this practical, outliers are detected using the IQR method.
+
+---
+
+# IQR (Interquartile Range)
+
+IQR is calculated as:
+
+IQR = Q3 - Q1
+
+Where:
+
+* Q1 = First Quartile (25%)
+* Q3 = Third Quartile (75%)
+
+Outlier limits are calculated as:
+
+Lower\ Limit = Q1 - 1.5 \times IQR
+
+Upper\ Limit = Q3 + 1.5 \times IQR
+
+Values outside these limits are considered outliers.
+
+---
+
+# Libraries Used
+
+## Pandas
+
+Used for:
+
+* handling datasets
+* creating DataFrames
+* performing analysis
+
+---
+
+## Matplotlib
+
+Used for:
+
+* plotting graphs
+* displaying charts
+
+---
+
+## Seaborn
+
+Used for:
+
+* attractive statistical visualizations
+* boxplots and advanced plots
+
+---
+
+## Scikit-learn
+
+Used for:
+
+* loading the Iris dataset
+
+---
+
+# Conclusion
+
+The Iris dataset was successfully analyzed and visualized using histograms and boxplots.
+Feature distributions were observed, and outliers were identified using the IQR method.
