@@ -1,0 +1,678 @@
+# Data Wrangling II
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler
+
+# Load dataset
+df = pd.read_csv("Final_Marks_Data.csv")
+
+# Display first 5 rows
+print(df.head())
+
+# Dataset information
+print(df.info())
+
+# Check missing values
+print(df.isnull().sum())
+
+# Handle missing values
+for col in df.columns:
+    if df[col].dtype == 'object':
+        df[col] = df[col].fillna(df[col].mode()[0])
+    else:
+        df[col] = df[col].fillna(df[col].median())
+
+# Check duplicate rows
+print("Duplicate rows:", df.duplicated().sum())
+
+# Remove duplicates
+df = df.drop_duplicates()
+
+# Remove inconsistent values
+df = df[(df['Attendance (%)'] >= 0) & (df['Attendance (%)'] <= 100)]
+df = df[(df['Internal Test 1 (out of 40)'] >= 0) & (df['Internal Test 1 (out of 40)'] <= 40)]
+df = df[(df['Internal Test 2 (out of 40)'] >= 0) & (df['Internal Test 2 (out of 40)'] <= 40)]
+df = df[(df['Assignment Score (out of 10)'] >= 0) & (df['Assignment Score (out of 10)'] <= 10)]
+df = df[(df['Daily Study Hours'] >= 0)]
+df = df[(df['Final Exam Marks (out of 100)'] >= 0) & (df['Final Exam Marks (out of 100)'] <= 100)]
+
+print("\nData after removing inconsistencies:")
+print(df.describe())
+
+# Select numeric columns
+numeric_cols = df.select_dtypes(include=np.number).columns
+
+# Boxplot for outlier visualization
+for col in numeric_cols:
+    plt.figure()
+    df.boxplot(column=col)
+    plt.title("Boxplot of " + col)
+    plt.show()
+
+# Detect and handle outliers using IQR + Capping Method
+for col in numeric_cols:
+
+    # Calculate Q1 and Q3
+    Q1 = df[col].quantile(0.25)
+    Q3 = df[col].quantile(0.75)
+
+    # Calculate IQR
+    IQR = Q3 - Q1
+
+    # Find limits
+    lower_limit = Q1 - 1.5 * IQR
+    upper_limit = Q3 + 1.5 * IQR
+
+    # Detect outliers
+    outliers = df[(df[col] < lower_limit) | (df[col] > upper_limit)]
+
+    print("\nColumn:", col)
+    print("Number of outliers:", len(outliers))
+
+    # Capping Method
+    df[col] = np.where(df[col] < lower_limit, lower_limit, df[col])
+    df[col] = np.where(df[col] > upper_limit, upper_limit, df[col])
+
+print("\nOutliers handled successfully.")
+
+# Data Transformation using Min-Max Scaling
+scaler = MinMaxScaler()
+
+df['Final Exam Marks Scaled'] = scaler.fit_transform(
+    df[['Final Exam Marks (out of 100)']]
+)
+
+print("\nTransformed Data:")
+print(df[['Final Exam Marks (out of 100)', 'Final Exam Marks Scaled']].head())
+
+# Save cleaned dataset
+df.to_csv("Cleaned_Final_Marks_Data.csv", index=False)
+
+print("\nCleaned dataset saved successfully.")
+
+
+
+# Data Wrangling II – Complete Theory Notes
+
+# What is Data Wrangling?
+
+Data Wrangling means:
+
+👉 Cleaning and transforming raw data into useful format.
+
+It improves:
+
+* accuracy
+* consistency
+* quality of data
+
+before analysis or machine learning.
+
+---
+
+# Objectives of This Practical
+
+1. Detect missing values and inconsistencies
+2. Handle missing values
+3. Detect outliers
+4. Handle outliers
+5. Apply data transformation
+6. Save cleaned dataset
+
+---
+
+# Libraries Used
+
+---
+
+# 1. Pandas
+
+```python id="mkm9gb"
+import pandas as pd
+```
+
+## What is Pandas?
+
+Pandas is a Python library used for:
+
+* data analysis
+* data cleaning
+* handling tables
+
+It works with datasets in tabular form.
+
+---
+
+## Main Features of Pandas
+
+* Read CSV files
+* Handle missing values
+* Filter data
+* Remove duplicates
+* Data transformation
+
+---
+
+## Common Pandas Functions
+
+| Function             | Purpose              |
+| -------------------- | -------------------- |
+| `pd.read_csv()`      | Read CSV file        |
+| `.head()`            | Show first 5 rows    |
+| `.info()`            | Dataset information  |
+| `.describe()`        | Statistical summary  |
+| `.isnull()`          | Check missing values |
+| `.fillna()`          | Fill missing values  |
+| `.drop_duplicates()` | Remove duplicates    |
+| `.to_csv()`          | Save dataset         |
+
+---
+
+# 2. NumPy
+
+```python id="sv7qj2"
+import numpy as np
+```
+
+## What is NumPy?
+
+NumPy is a Python library for:
+
+* numerical operations
+* arrays
+* mathematical calculations
+
+---
+
+## Features
+
+* Fast calculations
+* Supports arrays
+* Mathematical operations
+
+---
+
+## Function Used
+
+| Function     | Purpose                           |
+| ------------ | --------------------------------- |
+| `np.where()` | Replace values based on condition |
+| `np.number`  | Select numeric columns            |
+
+---
+
+# 3. Matplotlib
+
+```python id="u1y2hu"
+import matplotlib.pyplot as plt
+```
+
+## What is Matplotlib?
+
+Matplotlib is used for:
+
+* graphs
+* charts
+* data visualization
+
+---
+
+## Functions Used
+
+| Function       | Purpose             |
+| -------------- | ------------------- |
+| `plt.figure()` | Create graph window |
+| `df.boxplot()` | Draw boxplot        |
+| `plt.title()`  | Add graph title     |
+| `plt.show()`   | Display graph       |
+
+---
+
+# 4. Scikit-learn
+
+```python id="z9g1a8"
+from sklearn.preprocessing import MinMaxScaler
+```
+
+## What is Scikit-learn?
+
+Scikit-learn is a Machine Learning library.
+
+Used for:
+
+* preprocessing
+* scaling
+* machine learning algorithms
+
+---
+
+# MinMaxScaler
+
+Used for:
+👉 converting data into range 0 to 1.
+
+---
+
+# Dataset Loading
+
+```python id="cf3j8h"
+df = pd.read_csv("Final_Marks_Data.csv")
+```
+
+## Meaning
+
+Reads CSV file and stores data in dataframe.
+
+---
+
+# What is DataFrame?
+
+A DataFrame is:
+👉 table-like structure in pandas.
+
+Example:
+
+| Name | Marks |
+| ---- | ----- |
+| A    | 80    |
+| B    | 90    |
+
+---
+
+# Missing Values
+
+## What are Missing Values?
+
+Data that is empty or unavailable.
+
+Example:
+
+| Name | Marks |
+| ---- | ----- |
+| A    | 90    |
+| B    | NULL  |
+
+---
+
+# Detect Missing Values
+
+```python id="s8fhg5"
+df.isnull().sum()
+```
+
+## Meaning
+
+* `isnull()` → checks empty values
+* `sum()` → counts them
+
+---
+
+# Handling Missing Values
+
+```python id="t2ngg8"
+fillna()
+```
+
+Used to fill missing values.
+
+---
+
+# Mode
+
+```python id="t7gndu"
+mode()
+```
+
+Most frequently occurring value.
+
+Used for categorical/text columns.
+
+---
+
+# Median
+
+```python id="jlwmk1"
+median()
+```
+
+Middle value after sorting.
+
+Used for numeric columns.
+
+---
+
+# Why Median Instead of Mean?
+
+Because median is less affected by outliers.
+
+---
+
+# Duplicate Values
+
+## What are Duplicates?
+
+Repeated rows in dataset.
+
+---
+
+# Detect Duplicates
+
+```python id="x7vft5"
+df.duplicated().sum()
+```
+
+---
+
+# Remove Duplicates
+
+```python id="7uhvls"
+df.drop_duplicates()
+```
+
+---
+
+# Inconsistent Data
+
+## What is Inconsistency?
+
+Impossible or invalid values.
+
+Examples:
+
+* marks = 150 out of 100
+* attendance = -20
+
+---
+
+# Removing Inconsistencies
+
+```python id="r5nhg6"
+df[(df['Attendance (%)'] >= 0) & (df['Attendance (%)'] <= 100)]
+```
+
+Keeps only valid rows.
+
+---
+
+# Operators Used
+
+| Operator | Meaning               |    |
+| -------- | --------------------- | -- |
+| `>=`     | Greater than or equal |    |
+| `<=`     | Less than or equal    |    |
+| `&`      | AND                   |    |
+| `        | `                     | OR |
+
+---
+
+# Numeric Columns
+
+```python id="6g1ypm"
+df.select_dtypes(include=np.number)
+```
+
+Selects only numeric columns.
+
+---
+
+# Outliers
+
+## What are Outliers?
+
+Values very different from majority data.
+
+Example:
+
+```python id="0nqpcv"
+10, 12, 14, 15, 200
+```
+
+200 is outlier.
+
+---
+
+# Outlier Detection Method
+
+## IQR Method
+
+Most common statistical method.
+
+---
+
+# Quartiles
+
+| Quartile | Meaning        |
+| -------- | -------------- |
+| Q1       | 25% data point |
+| Q3       | 75% data point |
+
+---
+
+# Finding Q1 and Q3
+
+```python id="oljlwm"
+Q1 = df[col].quantile(0.25)
+Q3 = df[col].quantile(0.75)
+```
+
+---
+
+# IQR Formula
+
+IQR = Q3 - Q1
+
+---
+
+# Lower Limit Formula
+
+\text{Lower Limit} = Q1 - 1.5 \times IQR
+
+---
+
+# Upper Limit Formula
+
+\text{Upper Limit} = Q3 + 1.5 \times IQR
+
+---
+
+# Outlier Condition
+
+```python id="0g1ol8"
+(df[col] < lower_limit) | (df[col] > upper_limit)
+```
+
+Values outside limits are outliers.
+
+---
+
+# Boxplot
+
+## What is Boxplot?
+
+Graph used to detect outliers visually.
+
+---
+
+# Boxplot Components
+
+| Part            | Meaning         |
+| --------------- | --------------- |
+| Box             | Middle 50% data |
+| Line inside box | Median          |
+| Dots outside    | Outliers        |
+
+---
+
+# Capping Method
+
+## What is Capping?
+
+Replacing extreme values with upper/lower limit.
+
+---
+
+# Example
+
+Original:
+
+```python id="7d0oc7"
+10, 20, 30, 200
+```
+
+After capping:
+
+```python id="m1w65f"
+10, 20, 30, 50
+```
+
+---
+
+# np.where()
+
+```python id="c7gfj0"
+np.where(condition, true_value, false_value)
+```
+
+Checks condition and replaces values.
+
+---
+
+# Data Transformation
+
+## What is Data Transformation?
+
+Changing data format or scale.
+
+---
+
+# Min-Max Scaling
+
+Converts values into range:
+
+```text id="d9x8iw"
+0 to 1
+```
+
+---
+
+# Formula
+
+x' = \frac{x - x_{min}}{x_{max} - x_{min}}
+
+---
+
+# Why Min-Max Scaling?
+
+* Better understanding
+* Same scale for all values
+* Useful for machine learning
+
+---
+
+# fit_transform()
+
+## fit()
+
+Learns:
+
+* minimum value
+* maximum value
+
+---
+
+## transform()
+
+Converts data into scaled values.
+
+---
+
+# Saving Dataset
+
+```python id="0q3cv6"
+df.to_csv("Cleaned_Final_Marks_Data.csv", index=False)
+```
+
+## Meaning
+
+Saves cleaned dataset into CSV file.
+
+---
+
+# index=False
+
+Prevents extra index column from being saved.
+
+---
+
+# Advantages of Data Wrangling
+
+* Improves data quality
+* Removes errors
+* Better analysis
+* Better machine learning performance
+
+---
+
+# Viva Questions and Answers
+
+---
+
+# What is Data Wrangling?
+
+Data wrangling is the process of cleaning and transforming raw data into useful format.
+
+---
+
+# What are missing values?
+
+Missing values are empty or unavailable data values.
+
+---
+
+# What is an outlier?
+
+An outlier is a value very different from other values in dataset.
+
+---
+
+# Which method is used for outlier detection?
+
+IQR (Interquartile Range) method.
+
+---
+
+# What is IQR?
+
+Difference between Q3 and Q1.
+
+---
+
+# What is capping?
+
+Replacing extreme outlier values with acceptable upper or lower limits.
+
+---
+
+# What is Min-Max Scaling?
+
+A transformation technique that converts values into range 0 to 1.
+
+---
+
+# Why is data transformation used?
+
+To improve scale, reduce skewness, and improve analysis.
+
+---
+
+# Why use median for missing values?
+
+Median is less affected by outliers.
+
+---
+
+# Why use boxplot?
+
+To visually detect outliers.
