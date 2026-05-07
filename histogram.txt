@@ -1,0 +1,125 @@
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load Titanic dataset
+df = sns.load_dataset('titanic')
+
+# Display first 5 rows
+print(df.head())
+
+# Display dataset information
+print(df.info())
+
+# Display statistical summary
+print(df.describe())
+
+# Plot Histogram for Fare Distribution
+sns.histplot(df['fare'], bins=30, kde=True)
+
+plt.title("Fare Distribution")
+plt.xlabel("Fare")
+plt.ylabel("Frequency")
+
+plt.show()
+
+
+
+
+
+
+# Theory: Titanic Fare Distribution using Histogram
+
+## Aim
+
+To use the inbuilt Titanic dataset from the Seaborn library and visualize the distribution of passenger ticket prices (`fare`) using a histogram.
+
+---
+
+# Introduction
+
+Data Visualization is the graphical representation of data.
+It helps us understand patterns, trends, and distributions easily using graphs and charts.
+
+In this practical, we use the Titanic dataset available in the Seaborn library.
+The dataset contains information about passengers who traveled on the Titanic ship.
+
+We visualize the `fare` column using a Histogram.
+
+---
+
+# About Titanic Dataset
+
+The Titanic dataset contains:
+
+* 891 rows
+* Information about passengers such as:
+
+  * age
+  * gender
+  * passenger class
+  * fare
+  * survival status
+
+The `fare` column represents the ticket price paid by passengers.
+
+---
+
+# What is Histogram?
+
+A Histogram is a graph used to show the distribution of numerical data.
+
+It divides data into groups called bins and shows:
+
+* how many values fall into each group
+* frequency of data values
+
+Histogram is mainly used for:
+
+* understanding data distribution
+* identifying skewness
+* detecting outliers
+* observing frequency patterns
+
+---
+
+# About Seaborn Library
+
+Seaborn is a Python library used for:
+
+* statistical data visualization
+* attractive graphs
+* easy plotting
+
+It works on top of Matplotlib.
+
+Functions used:
+
+* `sns.load_dataset()` → loads inbuilt dataset
+* `sns.histplot()` → creates histogram
+
+---
+
+# Working of the Program
+
+1. Import Seaborn and Matplotlib libraries.
+2. Load Titanic dataset.
+3. Select the `fare` column.
+4. Use `histplot()` to create histogram.
+5. Add title and labels.
+6. Display the graph.
+
+---
+
+# Observation
+
+* Most passengers paid lower fares.
+* Very few passengers paid very high fares.
+* Data is right-skewed.
+* Some outliers are present with very high ticket prices.
+
+---
+
+# Conclusion
+
+Using Seaborn histogram, we successfully visualized the distribution of Titanic passenger fares.
+The histogram helped in understanding how ticket prices were distributed among passengers.
