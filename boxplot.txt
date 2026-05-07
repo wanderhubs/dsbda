@@ -1,0 +1,401 @@
+# Import seaborn library
+# Seaborn is used for data visualization (graphs)
+import seaborn as sns
+
+# Import matplotlib library
+# pyplot helps to display graphs
+import matplotlib.pyplot as plt
+
+
+# Load Titanic dataset
+# Titanic dataset is already available inside seaborn
+df = sns.load_dataset('titanic')
+
+
+# Create graph size
+# figsize = (width, height)
+plt.figure(figsize=(6,4))
+
+
+# Create Box Plot
+sns.boxplot(
+
+    # x-axis contains gender
+    x='sex',
+
+    # y-axis contains age
+    y='age',
+
+    # Different colors based on survival
+    # 0 = Not Survived
+    # 1 = Survived
+    hue='survived',
+
+    # Dataset name
+    data=df
+)
+
+
+# Add graph title
+plt.title("Box Plot: Age Distribution by Gender and Survival")
+
+
+# Label for x-axis
+plt.xlabel("Gender")
+
+
+# Label for y-axis
+plt.ylabel("Age")
+
+
+# Display graph on screen
+plt.show()
+
+
+# -------------------------------------------------------
+# Observations / Inference
+# -------------------------------------------------------
+
+# 1. Female passengers survived more than male passengers.
+
+# 2. Most passengers were between 20 and 40 years old.
+
+# 3. Many male passengers did not survive.
+
+# 4. Females had better survival chances.
+
+# 5. Some very old passengers are shown as outliers.
+
+
+
+# Theory: Box Plot using Titanic Dataset
+
+## Aim
+
+To visualize the distribution of passenger age with respect to gender and survival status using a Box Plot on the Titanic dataset.
+
+---
+
+# Theory
+
+## What is Data Visualization?
+
+Data Visualization is the graphical representation of data using charts, graphs, and plots.
+It helps us to:
+
+* Understand data easily
+* Find patterns and trends
+* Compare values
+* Detect outliers
+
+Python provides libraries like:
+
+* Matplotlib
+* Seaborn
+
+for creating visualizations.
+
+---
+
+# What is Seaborn?
+
+Seaborn is a Python library used for statistical data visualization.
+
+It is built on top of Matplotlib and provides:
+
+* Attractive graphs
+* Simple syntax
+* Better visualization features
+
+Example:
+
+```python id="7ypom1"
+import seaborn as sns
+```
+
+---
+
+# What is Titanic Dataset?
+
+Titanic dataset is an inbuilt dataset available in Seaborn.
+
+It contains information about passengers such as:
+
+* Age
+* Gender
+* Ticket class
+* Fare
+* Survival status
+
+Dataset loaded using:
+
+```python id="2s7xyl"
+df = sns.load_dataset('titanic')
+```
+
+---
+
+# What is a Box Plot?
+
+A Box Plot is a statistical graph used to show the distribution of numerical data.
+
+It displays:
+
+* Minimum value
+* Maximum value
+* Median
+* Quartiles
+* Outliers
+
+---
+
+# Components of Box Plot
+
+## 1. Minimum Value
+
+Smallest value in dataset.
+
+---
+
+## 2. Maximum Value
+
+Largest value in dataset.
+
+---
+
+## 3. Median
+
+Middle value of data.
+
+It divides data into two equal parts.
+
+---
+
+## 4. Quartiles
+
+Quartiles divide data into four parts.
+
+* Q1 → 25%
+* Q2 → Median (50%)
+* Q3 → 75%
+
+---
+
+## 5. Outliers
+
+Values far away from normal data.
+
+Example:
+
+* Most ages = 20–40
+* One age = 80
+* 80 becomes outlier
+
+---
+
+# Purpose of this Practical
+
+The practical helps to:
+
+* Compare age distribution of male and female passengers
+* Analyze survival based on gender
+* Detect age outliers
+
+---
+
+# Columns Used
+
+| Column   | Meaning             |
+| -------- | ------------------- |
+| sex      | Gender of passenger |
+| age      | Age of passenger    |
+| survived | Survival status     |
+
+---
+
+# Meaning of Survival Values
+
+| Value | Meaning      |
+| ----- | ------------ |
+| 0     | Not Survived |
+| 1     | Survived     |
+
+---
+
+# Explanation of Code
+
+## Load Dataset
+
+```python id="e4r8ic"
+df = sns.load_dataset('titanic')
+```
+
+Loads Titanic dataset.
+
+---
+
+## Create Box Plot
+
+```python id="6i7r79"
+sns.boxplot(x='sex', y='age', hue='survived', data=df)
+```
+
+### Parameters:
+
+* `x='sex'`
+  → Gender on X-axis
+
+* `y='age'`
+  → Age on Y-axis
+
+* `hue='survived'`
+  → Different colors for survival status
+
+* `data=df`
+  → Dataset name
+
+---
+
+# Observations
+
+1. Female passengers survived more than male passengers.
+2. Most passengers were between 20–40 years old.
+3. Male non-survivors are more in number.
+4. Some very old passengers are shown as outliers.
+5. Females had better survival chances.
+
+---
+
+# Conclusion
+
+Thus, the Box Plot was successfully created using the Titanic dataset to visualize age distribution based on gender and survival status.
+
+---
+
+# Viva Questions and Answers
+
+## 1. What is Data Visualization?
+
+Data Visualization is the graphical representation of data using charts and graphs.
+
+---
+
+## 2. What is Seaborn?
+
+Seaborn is a Python library used for statistical data visualization.
+
+---
+
+## 3. What is Matplotlib?
+
+Matplotlib is a Python library used to create graphs and plots.
+
+---
+
+## 4. What is a Box Plot?
+
+A Box Plot is a graph used to show data distribution, median, quartiles, and outliers.
+
+---
+
+## 5. What are outliers?
+
+Outliers are unusual values far away from normal data.
+
+---
+
+## 6. Why do we use Box Plot?
+
+We use Box Plot to:
+
+* Understand distribution
+* Detect outliers
+* Compare groups
+
+---
+
+## 7. What is the use of Titanic dataset?
+
+Titanic dataset is used for data analysis and visualization practice.
+
+---
+
+## 8. What does `hue='survived'` do?
+
+It separates data into different colors based on survival status.
+
+---
+
+## 9. What does `x='sex'` mean?
+
+It places gender values on the X-axis.
+
+---
+
+## 10. What does `y='age'` mean?
+
+It places age values on the Y-axis.
+
+---
+
+## 11. What is a DataFrame?
+
+A DataFrame is a table-like data structure in Python.
+
+---
+
+## 12. Which library provides Titanic dataset?
+
+Seaborn library.
+
+---
+
+## 13. How to load Titanic dataset?
+
+```python id="9awdkf"
+sns.load_dataset('titanic')
+```
+
+---
+
+## 14. What does `plt.show()` do?
+
+It displays the graph.
+
+---
+
+## 15. What is the purpose of `figsize`?
+
+It sets graph width and height.
+
+---
+
+## 16. What is median?
+
+Median is the middle value of data.
+
+---
+
+## 17. What are quartiles?
+
+Quartiles divide data into four equal parts.
+
+---
+
+## 18. Which plot is used in this practical?
+
+Box Plot.
+
+---
+
+## 19. What are the required columns in this practical?
+
+* sex
+* age
+* survived
+
+---
+
+## 20. What is the conclusion of this practical?
+
+Female passengers had better survival chances, and age distribution was visualized successfully using Box Plot.
