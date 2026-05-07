@@ -1,0 +1,684 @@
+# Linear Regression using Boston Housing Dataset
+
+# Import Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Load Dataset
+boston = fetch_openml(name='boston', version=1, as_frame=True)
+
+# Store dataset in dataframe
+df = boston.frame
+
+# Display first 5 rows
+print("First 5 Rows:")
+print(df.head())
+
+# Dataset Information
+print("\nDataset Info:")
+df.info()
+
+# Statistical Summary
+print("\nDataset Description:")
+print(df.describe())
+
+# Check missing values
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+# Input Features
+X = df.drop("MEDV", axis=1)
+
+# Target Variable
+y = df["MEDV"]
+
+# Split dataset into training and testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create Linear Regression Model
+model = LinearRegression()
+
+# Train Model
+model.fit(X_train, y_train)
+
+# Predict House Prices
+y_pred = model.predict(X_test)
+
+# Print Predicted Values
+print("\nPredicted Prices:")
+print(y_pred[:10])
+
+# Plot Actual vs Predicted Prices
+plt.scatter(y_test, y_pred)
+
+plt.xlabel("Actual Prices")
+plt.ylabel("Predicted Prices")
+plt.title("Actual vs Predicted House Prices")
+
+plt.show()
+
+# Linear Regression using Boston Housing Dataset
+
+## Complete Theory + Viva Questions & Answers
+
+---
+
+# 1. What is Data Analytics?
+
+Data Analytics is the process of:
+
+* collecting,
+* cleaning,
+* analyzing,
+* and interpreting data
+
+to find useful information and make predictions.
+
+---
+
+# 2. What is Machine Learning?
+
+Machine Learning is a branch of AI where computers learn patterns from data and make predictions automatically without being explicitly programmed.
+
+---
+
+# 3. What is Linear Regression?
+
+Linear Regression is a supervised machine learning algorithm used to predict continuous numerical values.
+
+It finds the relationship between:
+
+* independent variables (features)
+* dependent variable (target)
+
+---
+
+# Example
+
+Predicting:
+
+* House Price
+* Salary
+* Temperature
+* Marks
+
+---
+
+# 4. What is the Boston Housing Dataset?
+
+Boston Housing Dataset contains information about houses in Boston.
+
+It contains:
+
+* 506 rows (samples)
+* 14 columns
+
+Used for predicting house prices.
+
+---
+
+# 5. What is MEDV?
+
+`MEDV` means:
+
+> Median Value of Owner-Occupied Homes
+
+It is the target/output column representing house price.
+
+---
+
+# 6. Features of Boston Dataset
+
+| Feature | Meaning                            |
+| ------- | ---------------------------------- |
+| CRIM    | Crime rate                         |
+| ZN      | Residential land area              |
+| INDUS   | Industrial area                    |
+| CHAS    | Charles River dummy variable       |
+| NOX     | Nitric oxide concentration         |
+| RM      | Average number of rooms            |
+| AGE     | Age of houses                      |
+| DIS     | Distance from workplaces           |
+| RAD     | Highway accessibility              |
+| TAX     | Property tax rate                  |
+| PTRATIO | Student-teacher ratio              |
+| B       | Black population proportion        |
+| LSTAT   | Lower status population percentage |
+| MEDV    | House price                        |
+
+---
+
+# 7. What is Supervised Learning?
+
+Supervised learning means:
+
+* model learns from labeled data
+* input and output are both given
+
+Example:
+
+```text
+Rooms → House Price
+```
+
+---
+
+# 8. What are Independent Variables?
+
+Independent variables are input features.
+
+In this practical:
+
+```python id="3bjlwm"
+X
+```
+
+contains all input columns.
+
+Example:
+
+* RM
+* TAX
+* AGE
+
+---
+
+# 9. What is Dependent Variable?
+
+Dependent variable is output/target variable.
+
+In this practical:
+
+```python id="ymv2f0"
+y = df["MEDV"]
+```
+
+`MEDV` depends on other features.
+
+---
+
+# 10. What is a DataFrame?
+
+DataFrame is a table-like structure in pandas.
+
+Contains:
+
+* rows
+* columns
+
+Similar to Excel sheet.
+
+---
+
+# 11. What is Train-Test Split?
+
+Dataset is divided into:
+
+* Training data
+* Testing data
+
+---
+
+# Why?
+
+| Data          | Purpose     |
+| ------------- | ----------- |
+| Training Data | Teach model |
+| Testing Data  | Test model  |
+
+---
+
+# 12. What is the Purpose of test_size=0.2?
+
+Means:
+
+* 80% data for training
+* 20% data for testing
+
+---
+
+# 13. What is Model Training?
+
+Training means teaching the model using data.
+
+Done using:
+
+```python id="9rmjdy"
+model.fit(X_train, y_train)
+```
+
+---
+
+# 14. What is Prediction?
+
+Prediction means estimating output for new data.
+
+Done using:
+
+```python id="wh76ys"
+model.predict(X_test)
+```
+
+---
+
+# 15. What is Scatter Plot?
+
+Scatter plot shows relationship between two variables.
+
+Used to compare:
+
+* Actual prices
+* Predicted prices
+
+---
+
+# 16. What is Pandas?
+
+Pandas is a Python library used for:
+
+* data handling
+* tables
+* data analysis
+
+---
+
+# 17. What is Matplotlib?
+
+Matplotlib is a Python library used for:
+
+* graphs
+* charts
+* visualizations
+
+---
+
+# 18. What is Scikit-Learn?
+
+Scikit-learn is a machine learning library in Python.
+
+Used for:
+
+* regression
+* classification
+* clustering
+
+---
+
+# 19. What is fetch_openml()?
+
+Used to download datasets from OpenML.
+
+Example:
+
+```python id="rbk7a7"
+fetch_openml(name='boston')
+```
+
+---
+
+# 20. What is df.head()?
+
+Displays first 5 rows of dataset.
+
+---
+
+# 21. What is df.info()?
+
+Displays:
+
+* rows
+* columns
+* datatype
+* missing values
+
+---
+
+# 22. What is df.describe()?
+
+Displays statistical summary:
+
+* mean
+* max
+* min
+* standard deviation
+
+---
+
+# 23. What is isnull()?
+
+Checks missing values.
+
+---
+
+# 24. What is axis=1?
+
+`axis=1` means column operation.
+
+Example:
+
+```python id="m3ehzj"
+df.drop("MEDV", axis=1)
+```
+
+removes MEDV column.
+
+---
+
+# 25. What is Linear Equation in Linear Regression?
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"y = mx + c"}}
+
+Where:
+
+* y = predicted value
+* x = input
+* m = slope
+* c = intercept
+
+---
+
+# 26. Advantages of Linear Regression
+
+* Simple
+* Fast
+* Easy to understand
+* Good for numerical prediction
+
+---
+
+# 27. Limitations of Linear Regression
+
+* Works only for linear relationships
+* Sensitive to outliers
+* Accuracy may decrease for complex data
+
+---
+
+# 28. Applications of Linear Regression
+
+* House price prediction
+* Salary prediction
+* Stock prediction
+* Sales forecasting
+
+---
+
+# 29. Steps of This Practical
+
+```text id="a4wl7r"
+1. Import libraries
+2. Load dataset
+3. Analyze dataset
+4. Separate X and y
+5. Split dataset
+6. Create model
+7. Train model
+8. Predict values
+9. Visualize graph
+```
+
+---
+
+# Viva Questions and Answers
+
+# Basic Viva Questions
+
+---
+
+## Q1. What is Linear Regression?
+
+Linear Regression is a machine learning algorithm used to predict continuous numerical values.
+
+---
+
+## Q2. Which type of learning is Linear Regression?
+
+Supervised learning.
+
+---
+
+## Q3. Why is Boston Housing Dataset used?
+
+Used to predict house prices using different house features.
+
+---
+
+## Q4. What is MEDV?
+
+Target column representing house price.
+
+---
+
+## Q5. How many rows are present in dataset?
+
+506 rows.
+
+---
+
+## Q6. How many columns are present?
+
+14 columns.
+
+---
+
+## Q7. Which library is used for data handling?
+
+Pandas.
+
+---
+
+## Q8. Which library is used for visualization?
+
+Matplotlib.
+
+---
+
+## Q9. Which library is used for machine learning?
+
+Scikit-learn.
+
+---
+
+## Q10. What is the use of train_test_split()?
+
+Used to divide dataset into training and testing data.
+
+---
+
+## Q11. Why do we split dataset?
+
+To test model performance on unseen data.
+
+---
+
+## Q12. What is X?
+
+Input features.
+
+---
+
+## Q13. What is y?
+
+Target/output variable.
+
+---
+
+## Q14. What is model.fit()?
+
+Used to train model.
+
+---
+
+## Q15. What is model.predict()?
+
+Used to predict output values.
+
+---
+
+## Q16. What does df.head() do?
+
+Displays first 5 rows.
+
+---
+
+## Q17. What does df.info() do?
+
+Displays dataset information.
+
+---
+
+## Q18. What does df.describe() do?
+
+Displays statistical summary.
+
+---
+
+## Q19. What is the purpose of scatter plot?
+
+To compare actual and predicted values.
+
+---
+
+## Q20. What is the meaning of test_size=0.2?
+
+20% testing data and 80% training data.
+
+---
+
+# Intermediate Viva Questions
+
+---
+
+## Q21. What are features?
+
+Input columns used for prediction.
+
+---
+
+## Q22. What is target variable?
+
+Output column to be predicted.
+
+---
+
+## Q23. What is overfitting?
+
+Model performs well on training data but poorly on testing data.
+
+---
+
+## Q24. What is underfitting?
+
+Model fails to learn data properly.
+
+---
+
+## Q25. What is prediction?
+
+Estimating output for new input data.
+
+---
+
+## Q26. Why is data cleaning important?
+
+To improve model accuracy.
+
+---
+
+## Q27. What are missing values?
+
+Empty values in dataset.
+
+---
+
+## Q28. How do you check missing values?
+
+Using:
+
+```python id="2wfh8f"
+df.isnull().sum()
+```
+
+---
+
+## Q29. What is visualization?
+
+Graphical representation of data.
+
+---
+
+## Q30. What type of output does Linear Regression predict?
+
+Continuous numerical values.
+
+---
+
+# Programming Viva Questions
+
+---
+
+## Q31. Why do we use import?
+
+To use external libraries.
+
+---
+
+## Q32. What is a DataFrame?
+
+Table-like data structure.
+
+---
+
+## Q33. What is axis=1?
+
+Column operation.
+
+---
+
+## Q34. Difference between fit() and predict()?
+
+| fit()        | predict()       |
+| ------------ | --------------- |
+| Trains model | Predicts output |
+
+---
+
+## Q35. Why do we use random_state=42?
+
+To get same output every time.
+
+---
+
+## Q36. What is plt.show()?
+
+Displays graph.
+
+---
+
+## Q37. What is plt.xlabel()?
+
+Sets X-axis label.
+
+---
+
+## Q38. What is plt.ylabel()?
+
+Sets Y-axis label.
+
+---
+
+## Q39. What is plt.title()?
+
+Sets graph title.
+
+---
+
+## Q40. What is the main goal of this practical?
+
+To predict house prices using Linear Regression.
