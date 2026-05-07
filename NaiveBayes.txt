@@ -1,0 +1,528 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
+
+# Load iris dataset from sklearn
+iris = load_iris(as_frame=True)
+
+# Convert dataset into DataFrame
+df = iris.frame
+
+# Add species names
+df['species'] = df['target'].map({
+    0: 'setosa',
+    1: 'versicolor',
+    2: 'virginica'
+})
+
+# Remove target column
+df.drop('target', axis=1, inplace=True)
+
+# Features and target
+X = df.iloc[:, :-1]
+y = df.iloc[:, -1]
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Create Naive Bayes model
+model = GaussianNB()
+
+# Train model
+model.fit(X_train, y_train)
+
+# Predict output
+y_pred = model.predict(X_test)
+
+# Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+
+print("Confusion Matrix:")
+print(cm)
+
+# Accuracy, Error Rate, Precision, Recall
+accuracy = accuracy_score(y_test, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y_test, y_pred, average='macro')
+recall = recall_score(y_test, y_pred, average='macro')
+
+print("\nAccuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)
+
+# TP, FP, TN, FN for each class
+classes = np.unique(y)
+
+for i in range(len(classes)):
+    TP = cm[i, i]
+    FP = cm[:, i].sum() - TP
+    FN = cm[i, :].sum() - TP
+    TN = cm.sum() - (TP + FP + FN)
+
+    print("\nClass:", classes[i])
+    print("TP =", TP)
+    print("FP =", FP)
+    print("TN =", TN)
+    print("FN =", FN)
+
+
+    # Naïve Bayes Classification — Theory
+
+## What is Naïve Bayes?
+
+Naïve Bayes is a supervised machine learning classification algorithm based on Bayes Theorem.
+
+It is mainly used for:
+
+* Classification problems
+* Predicting categories/classes
+
+Example:
+
+* Email spam detection
+* Disease prediction
+* Flower classification
+
+---
+
+# Why is it called “Naïve”?
+
+It assumes that all input features are independent of each other.
+
+Example:
+
+* Sepal length does not depend on petal width.
+
+This assumption is called “naïve”.
+
+---
+
+# Bayes Theorem
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"P(A|B)=\frac{P(B|A)P(A)}{P(B)}"}}
+
+Where:
+
+| Term   | Meaning                        |
+| ------ | ------------------------------ |
+| P(A|B) | Probability of A when B occurs |
+| P(B|A) | Probability of B when A occurs |
+| P(A)   | Probability of A               |
+| P(B)   | Probability of B               |
+
+---
+
+# Types of Naïve Bayes
+
+| Type                    | Used For                     |
+| ----------------------- | ---------------------------- |
+| Gaussian Naïve Bayes    | Continuous numerical data    |
+| Multinomial Naïve Bayes | Text/document classification |
+| Bernoulli Naïve Bayes   | Binary data                  |
+
+---
+
+# Why GaussianNB is used here?
+
+Because Iris dataset contains continuous numerical values like:
+
+* Sepal length
+* Petal width
+
+So GaussianNB is suitable.
+
+---
+
+# Iris Dataset
+
+Iris dataset contains:
+
+* 150 flower records
+* 4 input features
+* 3 flower classes
+
+Classes:
+
+1. Setosa
+2. Versicolor
+3. Virginica
+
+---
+
+# Features in Iris Dataset
+
+| Feature      |
+| ------------ |
+| Sepal Length |
+| Sepal Width  |
+| Petal Length |
+| Petal Width  |
+
+---
+
+# Steps of Algorithm
+
+1. Load dataset
+2. Separate features and target
+3. Split dataset into training and testing data
+4. Train Naïve Bayes model
+5. Predict output
+6. Generate confusion matrix
+7. Calculate Accuracy, Precision, Recall
+
+---
+
+# What is Training Data?
+
+Training data is used to teach the model.
+
+Example:
+
+* Flower measurements + flower names
+
+---
+
+# What is Testing Data?
+
+Testing data checks model performance using unseen data.
+
+---
+
+# What is Classification?
+
+Classification means predicting category/class.
+
+Example:
+
+* Predicting flower type
+
+---
+
+# Confusion Matrix
+
+Confusion matrix compares:
+
+* Actual output
+* Predicted output
+
+Example:
+
+```python id="bz6u94"
+[[10 0 0]
+ [0 9 0]
+ [0 0 11]]
+```
+
+Diagonal values = correct predictions.
+
+---
+
+# TP, FP, TN, FN
+
+| Term | Meaning                        |
+| ---- | ------------------------------ |
+| TP   | Correctly predicted positive   |
+| FP   | Incorrectly predicted positive |
+| TN   | Correctly predicted negative   |
+| FN   | Incorrectly predicted negative |
+
+---
+
+# Accuracy
+
+Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
+
+Shows overall correctness of model.
+
+---
+
+# Error Rate
+
+Error\ Rate = \frac{FP + FN}{TP + TN + FP + FN}
+
+Shows wrong predictions percentage.
+
+---
+
+# Precision
+
+Precision = \frac{TP}{TP + FP}
+
+Shows how many predicted positives are correct.
+
+---
+
+# Recall
+
+Recall = \frac{TP}{TP + FN}
+
+Shows how many actual positives are identified correctly.
+
+---
+
+# Advantages of Naïve Bayes
+
+1. Simple and fast
+2. Easy to implement
+3. Works well with small datasets
+4. Good for classification problems
+
+---
+
+# Disadvantages of Naïve Bayes
+
+1. Assumes features are independent
+2. Less accurate for complex datasets
+3. Zero probability problem may occur
+
+---
+
+# Libraries Used
+
+| Library | Purpose                     |
+| ------- | --------------------------- |
+| pandas  | Dataset handling            |
+| numpy   | Numerical operations        |
+| sklearn | Machine learning algorithms |
+
+---
+
+# Important Functions Used
+
+| Function           | Purpose                  |
+| ------------------ | ------------------------ |
+| load_iris()        | Load iris dataset        |
+| train_test_split() | Split dataset            |
+| GaussianNB()       | Create Naïve Bayes model |
+| fit()              | Train model              |
+| predict()          | Predict output           |
+| confusion_matrix() | Create confusion matrix  |
+| accuracy_score()   | Calculate accuracy       |
+| precision_score()  | Calculate precision      |
+| recall_score()     | Calculate recall         |
+
+---
+
+# Viva Questions and Answers
+
+## 1. What is Naïve Bayes?
+
+Naïve Bayes is a supervised machine learning classification algorithm based on Bayes theorem.
+
+---
+
+## 2. Why is it called naïve?
+
+Because it assumes all features are independent.
+
+---
+
+## 3. What is classification?
+
+Classification means predicting category or class labels.
+
+---
+
+## 4. What is supervised learning?
+
+Learning using labeled data is called supervised learning.
+
+---
+
+## 5. What is Iris dataset?
+
+It is a flower dataset containing 150 records and 3 flower classes.
+
+---
+
+## 6. Name the classes in Iris dataset.
+
+* Setosa
+* Versicolor
+* Virginica
+
+---
+
+## 7. What is GaussianNB?
+
+Gaussian Naïve Bayes used for continuous numerical data.
+
+---
+
+## 8. Why GaussianNB is used in this practical?
+
+Because iris dataset contains continuous values.
+
+---
+
+## 9. What is training data?
+
+Data used to train model.
+
+---
+
+## 10. What is testing data?
+
+Data used to test model performance.
+
+---
+
+## 11. What is confusion matrix?
+
+A table used to compare actual and predicted results.
+
+---
+
+## 12. What is TP?
+
+True Positive means correctly predicted positive value.
+
+---
+
+## 13. What is FP?
+
+False Positive means wrongly predicted positive value.
+
+---
+
+## 14. What is TN?
+
+True Negative means correctly predicted negative value.
+
+---
+
+## 15. What is FN?
+
+False Negative means wrongly predicted negative value.
+
+---
+
+## 16. What is accuracy?
+
+Accuracy shows overall correctness of model.
+
+---
+
+## 17. What is precision?
+
+Precision shows how many predicted positives are correct.
+
+---
+
+## 18. What is recall?
+
+Recall shows how many actual positives are correctly identified.
+
+---
+
+## 19. Difference between precision and recall?
+
+| Precision                   | Recall                   |
+| --------------------------- | ------------------------ |
+| Correct predicted positives | Correct actual positives |
+
+---
+
+## 20. What is model training?
+
+Process of teaching machine learning model using data.
+
+---
+
+## 21. What is prediction?
+
+Guessing output using trained model.
+
+---
+
+## 22. Which library is used for machine learning?
+
+`sklearn`
+
+---
+
+## 23. Which function splits dataset?
+
+`train_test_split()`
+
+---
+
+## 24. Which function trains the model?
+
+`fit()`
+
+---
+
+## 25. Which function predicts output?
+
+`predict()`
+
+---
+
+## 26. What is DataFrame?
+
+Table-like structure in pandas.
+
+---
+
+## 27. What is `iloc`?
+
+Used to select rows and columns using index numbers.
+
+---
+
+## 28. What is `np.unique()`?
+
+Finds unique values from dataset.
+
+---
+
+## 29. What is feature variable?
+
+Input columns used for prediction.
+
+---
+
+## 30. What is target variable?
+
+Output column to be predicted.
+
+---
+
+## 31. What are advantages of Naïve Bayes?
+
+* Fast
+* Simple
+* Easy implementation
+
+---
+
+## 32. What are disadvantages of Naïve Bayes?
+
+* Assumes feature independence
+* Less accurate sometimes
+
+---
+
+## 33. What is machine learning?
+
+Teaching computer systems to learn from data.
+
+---
+
+## 34. What is probability?
+
+Chance of occurrence of an event.
+
+---
+
+## 35. What is Bayes theorem?
+
+Mathematical formula used to calculate conditional probability.
